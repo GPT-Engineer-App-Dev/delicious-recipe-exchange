@@ -1,6 +1,7 @@
-import { Container, VStack, Heading, Text, Box, Image, SimpleGrid, Button } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Box, Image, SimpleGrid, Button, HStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaStar } from "react-icons/fa";
 
 const Index = () => {
   const [recipes, setRecipes] = useState([]);
@@ -15,6 +16,12 @@ const Index = () => {
     fetchRecipes();
   }, []);
 
+  const calculateAverageRating = (ratings) => {
+    if (ratings.length === 0) return 0;
+    const sum = ratings.reduce((a, b) => a + b, 0);
+    return (sum / ratings.length).toFixed(1);
+  };
+
   return (
     <Container centerContent maxW="container.xl" py={10}>
       <VStack spacing={8}>
@@ -28,6 +35,10 @@ const Index = () => {
               <Box p={6}>
                 <Heading as="h3" size="lg" mb={2}>{recipe.title}</Heading>
                 <Text>{recipe.description}</Text>
+                <HStack mt={4}>
+                  <FaStar color={recipe.ratings.length > 0 ? "gold" : "gray"} />
+                  <Text>{calculateAverageRating(recipe.ratings)}</Text>
+                </HStack>
               </Box>
             </Box>
           ))}
